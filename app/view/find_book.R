@@ -19,7 +19,7 @@ box::use(
 )
 
 box::use(
-  app/logic/google_api_call[get_books_content, get_content_title, get_content_image],
+  app/logic/google_api_call[get_books_content, get_content_info, get_content_image],
   app/components/book_card[display_book_card],
 )
 
@@ -49,11 +49,11 @@ ui <- function(id) {
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
     books_content <- reactive(
-      get_books_content(input$search_books)
+      get_books_content(input$search_book)
     )
 
-    books_titles <- reactive(
-      books_content() |> get_content_title()
+    books_info <- reactive(
+      books_content() |> get_content_info()
     )
 
     books_img <- reactive(
@@ -62,7 +62,7 @@ server <- function(id) {
 
     output$book_img_card <- renderUI({
       req(input$search_book)
-      map2(books_titles(), books_img(), ~display_book_card(.x, .y))
+      map2(books_info(), books_img(), ~display_book_card(.x, .y))
     })
   })
 }

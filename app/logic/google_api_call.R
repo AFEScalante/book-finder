@@ -18,8 +18,15 @@ get_books_content <- function(search_field) {
 }
 
 #' @export
-get_content_title <- function(contents) {
-  map(contents, ~.x$volumeInfo$title)
+get_content_info <- function(contents) {
+  map(
+    contents,
+    ~list(
+      title = .x$volumeInfo$title,
+      authors = .x$volumeInfo$authors,
+      publisher = .x$volumeInfo$publisher
+    )
+  )
 }
 
 #' @export
