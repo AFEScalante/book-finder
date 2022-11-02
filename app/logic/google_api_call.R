@@ -11,7 +11,7 @@ get_books_content <- function(search_field) {
   book_content <- GET(
     url = url,
     query = list(
-      q = paste0('intitle:', search_field)
+      q = paste0("intitle:", search_field)
     )
   ) |> content()
   book_content$items
