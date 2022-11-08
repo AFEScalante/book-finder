@@ -15,7 +15,7 @@ box::use(
   ],
   purrr[map2],
   shinyWidgets[searchInput],
-  waiter[useWaiter],
+  shinycssloaders[...],
 )
 
 box::use(
@@ -27,20 +27,26 @@ box::use(
 ui <- function(id) {
   ns <- NS(id)
   tagList(
-    useWaiter(),
     div(
       class = "find-book",
         searchInput(
           inputId = ns("search_book"),
           label = "",
-          placeholder = "E.g. David Brown...",
+          placeholder = "Search book title...",
           btnSearch = icon("search"),
           btnReset = icon("remove")
         )
     ),
     div(
       class = "results-container",
-      uiOutput(ns("book_img_card"))
+      withSpinner(
+        uiOutput(ns("book_img_card")),
+        hide.ui = FALSE,
+        proxy.height = "400px",
+        type = 5,
+        color = "#0dc5c1",
+        size = 3
+      )
     )
   )
 }
@@ -48,9 +54,9 @@ ui <- function(id) {
 #' @export
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
-    books_content <- reactive(
+    books_content <- reactive({
       get_books_content(input$search_book)
-    )
+    })
 
     books_info <- reactive(
       books_content() |> get_content_info()
@@ -62,7 +68,14 @@ server <- function(id) {
 
     output$book_img_card <- renderUI({
       req(input$search_book)
-      map2(books_info(), books_img(), ~display_book_card(.x, .y))
+      withSpinner(
+        map2(books_info(), books_img(), ~display_book_card(.x, .y)),
+        hide.ui = FALSE,
+        proxy.height = "400px",
+        type = 5,
+        color = "#0dc5c1",
+        size = 3
+      )
     })
   })
 }

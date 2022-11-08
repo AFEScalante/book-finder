@@ -43,6 +43,7 @@
 }
 
 .book-card .book-title {
+  text-align: center;
   color: #4a4e69;
   white-space: nowrap;
   overflow: hidden;

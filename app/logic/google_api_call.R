@@ -31,5 +31,11 @@ get_content_info <- function(contents) {
 
 #' @export
 get_content_image <- function(contents) {
-  map(contents, ~.x$volumeInfo$imageLinks$smallThumbnail)
+  map(contents, ~validate_img_url(.x$volumeInfo$imageLinks$smallThumbnail))
+}
+
+#' @export
+validate_img_url <- function(url) {
+  if (is.null(url)) return("https://via.placeholder.com/200.png?text=Book+cover+not+available")
+  url
 }
